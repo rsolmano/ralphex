@@ -30,3 +30,8 @@
     height: 1.6rem;
     width: auto;
 }
+
+/* prevent flag/option/command names in first table column from wrapping */
+.md-typeset table:not([class]) td:first-child code {
+    white-space: nowrap;
+}
