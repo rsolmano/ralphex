@@ -622,6 +622,35 @@ func TestSkipFinalizeFlag(t *testing.T) {
 	})
 }
 
+func TestPreserveAnthropicAPIKeyFlag(t *testing.T) {
+	t.Run("flag_enables_when_config_disabled", func(t *testing.T) {
+		cfg := &config.Config{PreserveAnthropicAPIKey: false}
+		o := parseTestOpts(t, "--preserve-anthropic-api-key")
+
+		applyCLIOverrides(o, cfg)
+
+		assert.True(t, cfg.PreserveAnthropicAPIKey, "CLI flag should enable preserve in config")
+	})
+
+	t.Run("absent_flag_preserves_config_true", func(t *testing.T) {
+		cfg := &config.Config{PreserveAnthropicAPIKey: true}
+		o := parseTestOpts(t)
+
+		applyCLIOverrides(o, cfg)
+
+		assert.True(t, cfg.PreserveAnthropicAPIKey, "config-set true should be preserved when flag absent")
+	})
+
+	t.Run("absent_flag_preserves_config_false", func(t *testing.T) {
+		cfg := &config.Config{PreserveAnthropicAPIKey: false}
+		o := parseTestOpts(t)
+
+		applyCLIOverrides(o, cfg)
+
+		assert.False(t, cfg.PreserveAnthropicAPIKey)
+	})
+}
+
 func TestProviderOverrideFlags(t *testing.T) {
 	t.Run("claude_command_overrides_config", func(t *testing.T) {
 		cfg := &config.Config{ClaudeCommand: "configured-claude"}
