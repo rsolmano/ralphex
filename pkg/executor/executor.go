@@ -231,18 +231,18 @@ type streamEvent struct {
 
 // ClaudeExecutor runs claude CLI commands with streaming JSON parsing.
 type ClaudeExecutor struct {
-	Command                 string            // command to execute, defaults to "claude"
-	Args                    string            // additional arguments (space-separated), defaults to standard args
-	ArgsSet                 bool              // true when Args was explicitly set, including an empty value
-	Model                   string            // model override (e.g., "opus", "sonnet", "haiku"); empty = CLI default
-	Effort                  string            // reasoning effort override (e.g., "low", "medium", "high", "xhigh", "max"); empty = CLI default
-	OutputHandler           func(text string) // called for each text chunk, can be nil
-	Debug                   bool              // enable debug output
-	ErrorPatterns           []string          // patterns to detect in output (e.g., rate limit messages)
-	LimitPatterns           []string          // patterns to detect rate limits (checked before error patterns)
-	IdleTimeout             time.Duration     // kill session after this duration of no output, zero = disabled
-	PreserveAnthropicAPIKey bool              // when true, ANTHROPIC_API_KEY is passed through to the child claude process; default false strips it
-	cmdRunner               CommandRunner     // for testing, nil uses default
+	Command        string            // command to execute, defaults to "claude"
+	Args           string            // additional arguments (space-separated), defaults to standard args
+	ArgsSet        bool              // true when Args was explicitly set, including an empty value
+	Model          string            // model override (e.g., "opus", "sonnet", "haiku"); empty = CLI default
+	Effort         string            // reasoning effort override (e.g., "low", "medium", "high", "xhigh", "max"); empty = CLI default
+	OutputHandler  func(text string) // called for each text chunk, can be nil
+	Debug          bool              // enable debug output
+	ErrorPatterns  []string          // patterns to detect in output (e.g., rate limit messages)
+	LimitPatterns  []string          // patterns to detect rate limits (checked before error patterns)
+	IdleTimeout    time.Duration     // kill session after this duration of no output, zero = disabled
+	PreserveAPIKey bool              // when true, ANTHROPIC_API_KEY is passed through to the child; default false strips it
+	cmdRunner      CommandRunner     // for testing, nil uses default
 }
 
 // Run executes claude CLI with the given prompt and parses streaming JSON output.
@@ -288,7 +288,7 @@ func (e *ClaudeExecutor) Run(ctx context.Context, prompt string) Result {
 	if e.cmdRunner != nil {
 		runner = e.cmdRunner
 	} else {
-		runner = &execClaudeRunner{stdin: stdinReader, preserveAPIKey: e.PreserveAnthropicAPIKey}
+		runner = &execClaudeRunner{stdin: stdinReader, preserveAPIKey: e.PreserveAPIKey}
 	}
 
 	// set up idle timeout: derive a cancellable context that fires when no output

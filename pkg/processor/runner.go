@@ -140,7 +140,7 @@ func New(cfg Config, log Logger, holder *status.PhaseHolder) *Runner {
 		claudeExec.ErrorPatterns = cfg.AppConfig.ClaudeErrorPatterns
 		claudeExec.LimitPatterns = cfg.AppConfig.ClaudeLimitPatterns
 		claudeExec.IdleTimeout = cfg.AppConfig.IdleTimeout
-		claudeExec.PreserveAnthropicAPIKey = cfg.AppConfig.PreserveAnthropicAPIKey
+		claudeExec.PreserveAPIKey = cfg.AppConfig.PreserveAnthropicAPIKey
 	}
 	taskModel, taskEffort := ParseModelEffort(cfg.TaskModel)
 	claudeExec.Model, claudeExec.Effort = taskModel, taskEffort
@@ -168,7 +168,7 @@ func New(cfg Config, log Logger, holder *status.PhaseHolder) *Runner {
 			re.ErrorPatterns = cfg.AppConfig.ClaudeErrorPatterns
 			re.LimitPatterns = cfg.AppConfig.ClaudeLimitPatterns
 			re.IdleTimeout = cfg.AppConfig.IdleTimeout
-			re.PreserveAnthropicAPIKey = cfg.AppConfig.PreserveAnthropicAPIKey
+			re.PreserveAPIKey = cfg.AppConfig.PreserveAnthropicAPIKey
 		}
 		reviewExec = re
 	}
